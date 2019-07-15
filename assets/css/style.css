@@ -1,0 +1,36 @@
+.header-panel, .video-panel, .footer-panel{
+    background: rgba(0, 0, 0, 0.3);
+    color: #fff;
+}
+
+.header-panel{
+    min-height: 100px;
+}
+
+.header-panel h3{
+    line-height: 100px;
+}
+
+.video-panel{
+    min-height: 480px;
+
+    background: transparent;
+}
+
+.footer-panel{}
+
+.footer-panel .music-box-control-item{
+    cursor: pointer;
+
+    font-size: 24px;
+    text-align: center;
+    padding: 0 10px;
+
+    line-height: 50px;
+
+    transition: all 0.25s ease;
+}
+
+.footer-panel .music-box-control-item:hover{
+    background: rgba(0, 0, 0, 0.7);
+}
