@@ -1,0 +1,8 @@
+version: '2.1'
+
+services:
+  musiz_app:
+    image: musiz_app
+    build: .
+    ports:
+      - 8090:8090

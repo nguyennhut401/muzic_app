@@ -1,0 +1,10 @@
+version: '2.1'
+
+services:
+  musiz_app:
+    image: musiz_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8090:8090
