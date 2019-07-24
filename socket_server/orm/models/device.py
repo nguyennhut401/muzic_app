@@ -14,4 +14,5 @@ class Device(common.CommonModel):
     token = models.CharField(max_length=255)
     status = models.CharField(max_length=20, choices=Status.choices(), default=Status.OFF.name)
     
-
+    class Meta:
+        db_table='device'
