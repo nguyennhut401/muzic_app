@@ -13,7 +13,7 @@ class Room(common.CommonModel):
         DIS = 'Deactivated'
 
     uuid = models.TextField(unique=True, db_index=True)
-    member = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    member = models.ManyToManyField(User)
     status = models.CharField(max_length=10, default=Status.OFF.name, choices=Status.choices())
 
     @staticmethod
