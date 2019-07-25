@@ -134,3 +134,5 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+DB_TABLE_SOCKET = 'signal_table_updating'
