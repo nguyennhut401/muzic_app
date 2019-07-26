@@ -4,9 +4,9 @@ import json
 import websocket
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from django.core import serializers
 from django.db import models
-from django.db.models.signals import (post_delete, post_save, pre_delete,
-                                      pre_save)
+from django.db.models.signals import (post_delete, post_save)
 from django.dispatch import receiver
 from django.conf import settings
 
@@ -21,10 +21,8 @@ class CommonModel(models.Model):
     updated = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __init__(self, *args, **kwargs):
-        pre_save.connect(self.save_signal, sender=self.__class__)
         post_save.connect(self.save_signal, sender=self.__class__)
 
-        pre_delete.connect(self.delete_signal, sender=self.__class__)
         post_delete.connect(self.delete_signal, sender=self.__class__)
 
         return super().__init__(*args, **kwargs)
@@ -34,23 +32,25 @@ class CommonModel(models.Model):
         channel_layer = get_channel_layer()
 
         async_to_sync(channel_layer.group_send)(settings.DB_TABLE_SOCKET, {
-            'package': self.build_signal_object(sender, **kwargs)
+            'package': self.build_signal_object(kwargs['instance'], 'save')
         })
 
     def delete_signal(self, sender, **kwargs):
         channel_layer = get_channel_layer()
 
         async_to_sync(channel_layer.group_send)(settings.DB_TABLE_SOCKET, {
-            'package': self.build_signal_object(sender, **kwargs)
+            'package': self.build_signal_object(kwargs['instance'], 'delete')
         })
 
-    def build_signal_object(self, sender, **kwargs):
+    def build_signal_object(self, instance, action):
+        import pdb; pdb.set_trace()
+
         package_obj = {
-            'table': sender.__name__,
-            'action': '',
+            'table': instance.__class__.__name__,
+            'action': action,
             'detail': {
                 'from': {},
-                'to': {}
+                'to': serializers.serialize('json', [instance])
             }
         }
 
